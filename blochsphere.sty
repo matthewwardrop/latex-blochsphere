@@ -6,7 +6,7 @@
 %\usepackage{trace}
 %\tracingall
 
-\usepackage{tikz,etoolbox}
+\usepackage{tikz,etoolbox,environ}
 \usetikzlibrary{decorations.pathreplacing, decorations.markings, calc, fadings}
 
 \define@key{blochsphere}{radius}{%
@@ -79,7 +79,7 @@
 }
 \providecommand{\blochsphere@mark}{1}
 
-\newenvironment{blochsphere}[1][]{%
+\NewEnviron{blochsphere}[1][]{%
   \begingroup
   \makeatletter
   \setkeys{blochsphere}{#1}
@@ -415,9 +415,12 @@
      \draw[on layer=main,color=\blochsphere@color] (0,0) circle (\blochsphere@radius); % 3D lighting effect
      }{}
 
-}{%
+  \BODY
+  
   \end{tikzpicture}
   \endgroup
+}{%
+
 }
 
 \endinput
