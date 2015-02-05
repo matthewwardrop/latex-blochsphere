@@ -256,9 +256,8 @@
         \TiltedPlane[shift={\xshift,\yshift,\zshift}]{##2}{##3}
         \GetVisibility{##2}{##3}{agamma}{abeta}
         \begingroup\edef\tmp{\endgroup%
-          % TODO: Properly deal with all cases
-          \noexpand\draw[current plane,on layer=back,\unexpanded\expandafter{\blochsphere@style}] \unexpanded\expandafter{(\agamma-\abeta-0.2:\blochsphere@radius*\blochsphere@scale cm+\the\pgflinewidth*0.5) arc (\agamma-\abeta-0.2:\agamma+\abeta+0.2:\blochsphere@radius*\blochsphere@scale cm+\the\pgflinewidth*0.5)};
-          \noexpand\draw[<-,current plane,on layer=front,\unexpanded\expandafter{\blochsphere@style}] \unexpanded\expandafter{(\agamma+\abeta+##5:\blochsphere@radius*\blochsphere@scale cm+\the\pgflinewidth*0.5) arc (\agamma+\abeta+##5:\agamma-\abeta+360:\blochsphere@radius*\blochsphere@scale cm+\the\pgflinewidth*0.5)};
+          \noexpand\draw[current plane,on layer=back,\unexpanded\expandafter{\blochsphere@style}] \unexpanded\expandafter{(\agamma-\abeta-0.2:\blochsphere@radius*\blochsphere@scale+\the\pgflinewidth*0.5) arc (\agamma-\abeta-0.2:\agamma+\abeta+0.2:\blochsphere@radius*\blochsphere@scale+\the\pgflinewidth*0.5)};
+          \noexpand\draw[<-,current plane,on layer=front,\unexpanded\expandafter{\blochsphere@style}] \unexpanded\expandafter{(\agamma+\abeta+##5:\blochsphere@radius*\blochsphere@scale+\the\pgflinewidth*0.5) arc (\agamma+\abeta+##5:\agamma-\abeta+360:\blochsphere@radius*\blochsphere@scale+\the\pgflinewidth*0.5)};
           } \tmp
       \endgroup
     }
@@ -272,9 +271,8 @@
         \TiltedPlane[shift={\xshift,\yshift,\zshift}]{##2}{##3}
         \GetVisibility{##2}{##3}{agamma}{abeta}
         \begingroup\edef\tmp{\endgroup%
-          % TODO: Properly deal with all cases
-          \noexpand\draw[current plane,on layer=back,\unexpanded\expandafter{\blochsphere@style}] \unexpanded\expandafter{(\agamma-\abeta-0.2:\blochsphere@radius*\blochsphere@scale cm+\the\pgflinewidth*0.5) arc (\agamma-\abeta-0.2:\agamma+\abeta+0.2:\blochsphere@radius*\blochsphere@scale cm+\the\pgflinewidth*0.5)};
-          \noexpand\draw[->,current plane,on layer=front,\unexpanded\expandafter{\blochsphere@style}] \unexpanded\expandafter{(\agamma+\abeta:\blochsphere@radius*\blochsphere@scale cm+\the\pgflinewidth*0.5) arc (\agamma+\abeta:\agamma-\abeta+360-##5:\blochsphere@radius*\blochsphere@scale cm+\the\pgflinewidth*0.5)};
+          \noexpand\draw[current plane,on layer=back,\unexpanded\expandafter{\blochsphere@style}] \unexpanded\expandafter{(\agamma-\abeta-0.2:\blochsphere@radius*\blochsphere@scale+\the\pgflinewidth*0.5) arc (\agamma-\abeta-0.2:\agamma+\abeta+0.2:\blochsphere@radius*\blochsphere@scale+\the\pgflinewidth*0.5)};
+          \noexpand\draw[->,current plane,on layer=front,\unexpanded\expandafter{\blochsphere@style}] \unexpanded\expandafter{(\agamma+\abeta:\blochsphere@radius*\blochsphere@scale+\the\pgflinewidth*0.5) arc (\agamma+\abeta:\agamma-\abeta+360-##5:\blochsphere@radius*\blochsphere@scale+\the\pgflinewidth*0.5)};
           } \tmp
       \endgroup
     }
@@ -416,7 +414,7 @@
      }{}
 
   \BODY
-  
+
   \end{tikzpicture}
   \endgroup
 }{%
