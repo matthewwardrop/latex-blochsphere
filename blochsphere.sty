@@ -6,7 +6,7 @@
 %\usepackage{trace}
 %\tracingall
 
-\usepackage{tikz,etoolbox,environ}
+\usepackage{tikz,etoolbox,environ,ifthen}
 \usetikzlibrary{decorations.pathreplacing, decorations.markings, calc, fadings}
 
 \define@key{blochsphere}{radius}{%
@@ -79,13 +79,24 @@
 }
 \providecommand{\blochsphere@mark}{1}
 
-\NewEnviron{blochsphere}[1][]{%
+\define@key{blochsphere}{nested}{
+\setboolean{blochsphere@nested}{#1}
+}
+\newboolean{blochsphere@nested}
+\setboolean{blochsphere@nested}{false}
+
+
+    
+
+%\NewEnviron{blochsphere}[1][]{%
+\newenvironment{blochsphere}[1][]{
   \begingroup
   \makeatletter
+  
   \setkeys{blochsphere}{#1}
 
   % Handle Layers
-    \pgfdeclarelayer{back}
+  \pgfdeclarelayer{back}
     \pgfdeclarelayer{front}
     \pgfsetlayers{back,main,front}
 
@@ -106,6 +117,19 @@
     }
 
     \def\node@on@layer{\aftergroup\node@@on@layer}
+    
+    \newcommand\DrawSphere[1][]{
+    \begingroup
+    \setkeys{blochsphere}{##1}
+    
+    \expandafter\ifstrequal\expandafter{\blochsphere@ball}{3d}{
+     \fill[on layer=main,ball color=\blochsphere@color,opacity=\blochsphere@opacity] (0,0) circle (\blochsphere@radius); % 3D lighting effect
+     }{}
+ 	 \expandafter\ifstrequal\expandafter{\blochsphere@ball}{circle}{
+     \draw[on layer=main,color=\blochsphere@color] (0,0) circle (\blochsphere@radius); % 3D lighting effect
+     }{}
+     \endgroup
+    }
 
   % 3D Transformations
 
@@ -119,10 +143,10 @@
       \ifdim\dot pt<0.7 pt\relax%
         \pgfmathsetmacro\norm{cos(asin(\dot))}
 
-      	\pgfmathsetmacro\xx{-sin(\aphi)*sin(\blochsphere@rotation - \atheta)}
-      	\pgfmathsetmacro\xy{sin(\aphi)*sin(\blochsphere@tilt)*cos(\blochsphere@rotation - \atheta)}
-      	\pgfmathsetmacro\yx{-sin(2*\aphi - \blochsphere@rotation + \atheta)/4 - sin(2*\aphi + \blochsphere@rotation - \atheta)/4}
-      	\pgfmathsetmacro\yy{(sin(\aphi)*cos(\blochsphere@tilt) - sin(\blochsphere@tilt)*sin(\blochsphere@rotation - \atheta)*cos(\aphi))*sin(\aphi)}
+        \pgfmathsetmacro\xx{-sin(\aphi)*sin(\blochsphere@rotation - \atheta)}
+        \pgfmathsetmacro\xy{sin(\aphi)*sin(\blochsphere@tilt)*cos(\blochsphere@rotation - \atheta)}
+        \pgfmathsetmacro\yx{-sin(2*\aphi - \blochsphere@rotation + \atheta)/4 - sin(2*\aphi + \blochsphere@rotation - \atheta)/4}
+        \pgfmathsetmacro\yy{(sin(\aphi)*cos(\blochsphere@tilt) - sin(\blochsphere@tilt)*sin(\blochsphere@rotation - \atheta)*cos(\aphi))*sin(\aphi)}
       \else
         \pgfmathsetmacro\norm{sqrt(abs(sin(\blochsphere@rotation - \atheta)*cos(\aphi))^2 + abs(sin(\blochsphere@tilt)*cos(\aphi)*cos(\blochsphere@rotation - \atheta))^2 + abs(cos(\aphi)*cos(\blochsphere@tilt)*cos(\blochsphere@rotation - \atheta))^2)}
 
@@ -133,7 +157,6 @@
       \fi
 
       \GetProjShift{shift}
-
      \begingroup\newcommand\tmp[1]{\endgroup\noexpand\relax%
        \tikzset{\blochsphere@plane/.style={cm={\xx/\norm, \xy/\norm, \yx/\norm, \yy/\norm, \unexpanded\expandafter{####1} }}}%
        } \tmp{\shift}
@@ -278,32 +301,32 @@
     }
 
     \newcommand\DrawAxis[3][] {
-    	\begingroup
-    	\setkeys{blochsphere}{##1}
-	    \pgfmathsetmacro\behind{ifthenelse(-sin(##2)*sin(\blochsphere@rotation - ##3)*cos(\blochsphere@tilt) + sin(\blochsphere@tilt)*cos(##2)<0, 1, 0)}
+      \begingroup
+      \setkeys{blochsphere}{##1}
+      \pgfmathsetmacro\behind{ifthenelse(-sin(##2)*sin(\blochsphere@rotation - ##3)*cos(\blochsphere@tilt) + sin(\blochsphere@tilt)*cos(##2)<0, 1, 0)}
 
-	   	\pgfmathsetmacro\newphi{180-##2}
-	   	\pgfmathsetmacro\newtheta{##3+180}
-	    \ifnum\behind=0\relax
-    		\LabelPolar[scale=1,mark=0]{blochspheretmpp}{##2}{##3}
-    		\LabelPolar[mark=0]{blochspheretmps}{##2}{##3}
-	    	\LabelPolar[mark=0]{blochspheretmpe}{\newphi}{\newtheta}
-		\else
-			\LabelPolar[scale=1,mark=0]{blochspheretmpp}{\newphi}{\newtheta}
-			\LabelPolar[mark=0]{blochspheretmpe}{##2}{##3}
-	    	\LabelPolar[mark=0]{blochspheretmps}{\newphi}{\newtheta}
-		\fi
+       \pgfmathsetmacro\newphi{180-##2}
+       \pgfmathsetmacro\newtheta{##3+180}
+      \ifnum\behind=0\relax
+        \LabelPolar[scale=1,mark=0]{blochspheretmpp}{##2}{##3}
+        \LabelPolar[mark=0]{blochspheretmps}{##2}{##3}
+        \LabelPolar[mark=0]{blochspheretmpe}{\newphi}{\newtheta}
+    \else
+      \LabelPolar[scale=1,mark=0]{blochspheretmpp}{\newphi}{\newtheta}
+      \LabelPolar[mark=0]{blochspheretmpe}{##2}{##3}
+        \LabelPolar[mark=0]{blochspheretmps}{\newphi}{\newtheta}
+    \fi
 
-	    \begingroup\edef\tmp{\endgroup%
-	    	\ifnum\behind=0\relax
-	    	\noexpand\draw[on layer=front,\unexpanded\expandafter{\blochsphere@style},\blochsphere@axisarrow] (blochspheretmpp) -- (blochspheretmps);
-	    	\noexpand\draw[on layer=back,\unexpanded\expandafter{\blochsphere@style}] (blochspheretmpe) -- (blochspheretmpp);
-	    	\else
-	    	\noexpand\draw[on layer=front,\unexpanded\expandafter{\blochsphere@style},\blochsphere@axisarrow] (blochspheretmpp) -- (blochspheretmpe);
-	    	\noexpand\draw[on layer=back,\unexpanded\expandafter{\blochsphere@style}] (blochspheretmps) -- (blochspheretmpp);
-	    	\fi
-	    } \tmp
-    	\endgroup
+      \begingroup\edef\tmp{\endgroup%
+        \ifnum\behind=0\relax
+        \noexpand\draw[on layer=front,\unexpanded\expandafter{\blochsphere@style},\blochsphere@axisarrow] (blochspheretmpp) -- (blochspheretmps);
+        \noexpand\draw[on layer=back,\unexpanded\expandafter{\blochsphere@style}] (blochspheretmpe) -- (blochspheretmpp);
+        \else
+        \noexpand\draw[on layer=front,\unexpanded\expandafter{\blochsphere@style},\blochsphere@axisarrow] (blochspheretmpp) -- (blochspheretmpe);
+        \noexpand\draw[on layer=back,\unexpanded\expandafter{\blochsphere@style}] (blochspheretmps) -- (blochspheretmpp);
+        \fi
+      } \tmp
+      \endgroup
     }
 
     \newcommand\LabelPolar[4][]{%
@@ -313,18 +336,18 @@
         \LongitudePlane{##4+90}
         \pgfmathsetmacro\behind{ifthenelse(-sin(##3)*sin(\blochsphere@rotation - ##4)*cos(\blochsphere@tilt) + sin(\blochsphere@tilt)*cos(##3)<0, 1, 0)}
         \ifnum\blochsphere@mark=1\relax
-		    \ifnum\behind=1\relax
-		      \path[current plane,on layer=back] (90-##3:\blochsphere@radius*\blochsphere@scale) coordinate[mark coordinate] (##2); %
-		    \else
-		      \path[current plane,on layer=front] (90-##3:\blochsphere@radius*\blochsphere@scale) coordinate[mark coordinate] (##2); %
-		    \fi
-		\else
-			\ifnum\behind=1\relax
-		      \path[current plane,on layer=back] (90-##3:\blochsphere@radius*\blochsphere@scale) coordinate (##2); %
-		    \else
-		      \path[current plane,on layer=front] (90-##3:\blochsphere@radius*\blochsphere@scale) coordinate (##2); %
-		    \fi
-		\fi
+        \ifnum\behind=1\relax
+          \path[current plane,on layer=back] (90-##3:\blochsphere@radius*\blochsphere@scale) coordinate[mark coordinate] (##2); %
+        \else
+          \path[current plane,on layer=front] (90-##3:\blochsphere@radius*\blochsphere@scale) coordinate[mark coordinate] (##2); %
+        \fi
+    \else
+      \ifnum\behind=1\relax
+          \path[current plane,on layer=back] (90-##3:\blochsphere@radius*\blochsphere@scale) coordinate (##2); %
+        \else
+          \path[current plane,on layer=front] (90-##3:\blochsphere@radius*\blochsphere@scale) coordinate (##2); %
+        \fi
+    \fi
       \endgroup
     }
 
@@ -404,21 +427,19 @@
          color(25bp)=(tikz@ball!70!black);
          color(50bp)=(black)}
 
-  \begin{tikzpicture} % CENT
-
-  \expandafter\ifstrequal\expandafter{\blochsphere@ball}{3d}{
-     \fill[on layer=main,ball color=\blochsphere@color,opacity=\blochsphere@opacity] (0,0) circle (\blochsphere@radius); % 3D lighting effect
-     }{}
-  \expandafter\ifstrequal\expandafter{\blochsphere@ball}{circle}{
-     \draw[on layer=main,color=\blochsphere@color] (0,0) circle (\blochsphere@radius); % 3D lighting effect
-     }{}
-
-  \BODY
-
+  \ifthenelse{\boolean{blochsphere@nested}}{}{
+  \begin{tikzpicture}
+  \DrawSphere
+  }
+  
+  
+  }{
+  \ifthenelse{\boolean{blochsphere@nested}}{}{
   \end{tikzpicture}
+  }
   \endgroup
-}{%
+}%{%
 
-}
+%}
 
 \endinput
