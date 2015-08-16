@@ -59,25 +59,25 @@
 }
 \providecommand{\blochsphere@ball}{3d}
 
-\define@key{blochsphere}{linecolor}{%
-	\def\blochsphere@linecolor{#1}%
+\define@key{blochsphere}{statecolor}{%
+	\def\blochsphere@statecolor{#1}%
 }
-\providecommand{\blochsphere@linecolor}{black}
+\providecommand{\blochsphere@statecolor}{black}
 
-\define@key{blochsphere}{linewidth}{%
-	\def\blochsphere@linewidth{#1}%
+\define@key{blochsphere}{statewidth}{%
+	\def\blochsphere@statewidth{#1}%
 }
-\providecommand{\blochsphere@linewidth}{0.4pt}
+\providecommand{\blochsphere@statewidth}{0.4pt}
 
 \define@key{blochsphere}{axisarrow}{%
 	\def\blochsphere@axisarrow{#1}%
 }
 \providecommand{\blochsphere@axisarrow}{}
 
-\define@key{blochsphere}{mark}{%
-	\def\blochsphere@mark{#1}%
+\define@key{blochsphere}{labelmark}{%
+	\def\blochsphere@labelmark{#1}%
 }
-\providecommand{\blochsphere@mark}{1}
+\providecommand{\blochsphere@labelmark}{1}
 
 \define@key{blochsphere}{nested}{%
 	\setboolean{blochsphere@nested}{#1}%
@@ -287,7 +287,7 @@
 		\setkeys{blochsphere}{##1}
 		\setLongitudinalDrawingPlane{##4+90}
 		\pgfmathsetmacro\behind{ifthenelse(-sin(##3)*sin(\blochsphere@rotation - ##4)*cos(\blochsphere@tilt) + sin(\blochsphere@tilt)*cos(##3)<0, 1, 0)}
-		\ifnum\blochsphere@mark=1\relax
+		\ifnum\blochsphere@labelmark=1\relax
 			\ifnum\behind=1\relax
 				\path[current plane,on layer=back] (90-##3:\blochsphere@radius*\blochsphere@scale) coordinate[mark coordinate] (##2); %
 			\else
@@ -332,13 +332,13 @@
 			decorate,
 			decoration={
 			markings,
-			mark=at position \pgfdecoratedpathlength-0.5pt with {\arrow[\blochsphere@linecolor,line width=\blochsphere@linewidth,opacity=0.2] {>}; },
+			mark=at position \pgfdecoratedpathlength-0.5pt with {\arrow[\blochsphere@statecolor,line width=\blochsphere@statewidth,opacity=0.2] {>}; },
 			mark=between positions 0 and \pgfdecoratedpathlength-5pt step 0.5pt with {
 			\pgfmathsetmacro\myval{multiply(divide(
 			\pgfkeysvalueof{/pgf/decoration/mark info/distance from start}, \pgfdecoratedpathlength),100)};
-			\pgfsetfillcolor{\blochsphere@linecolor};
+			\pgfsetfillcolor{\blochsphere@statecolor};
 			\pgfsetfillopacity{0.4-\myval/100*0.2}
-			\pgfpathcircle{\pgfpointorigin}{\blochsphere@linewidth};
+			\pgfpathcircle{\pgfpointorigin}{\blochsphere@statewidth};
 			\pgfusepath{fill};}
 			}}}}
 		\else
@@ -347,13 +347,13 @@
 			decorate,
 			decoration={
 			markings,
-			mark=at position \pgfdecoratedpathlength-0.5pt with {\arrow[\blochsphere@linecolor,line width=\blochsphere@linewidth] {>}; },
+			mark=at position \pgfdecoratedpathlength-0.5pt with {\arrow[\blochsphere@statecolor,line width=\blochsphere@statewidth] {>}; },
 			mark=between positions 0 and \pgfdecoratedpathlength-5pt step 0.5pt with {
 			\pgfmathsetmacro\myval{multiply(divide(
 			\pgfkeysvalueof{/pgf/decoration/mark info/distance from start}, \pgfdecoratedpathlength),100)};
-			\pgfsetfillcolor{\blochsphere@linecolor};
+			\pgfsetfillcolor{\blochsphere@statecolor};
 			\pgfsetfillopacity{0.4+\myval/100*0.6}
-			\pgfpathcircle{\pgfpointorigin}{\blochsphere@linewidth};
+			\pgfpathcircle{\pgfpointorigin}{\blochsphere@statewidth};
 			\pgfusepath{fill};}
 			}}}}
 		\fi
