@@ -1,4 +1,6 @@
 latex-blochsphere
 =================
 
-A LaTeX package which allows for simple drawing of 3D projections of Bloch spheres.
+A LaTeX package which allows for simple drawing of axonometric projections of Bloch spheres.
+
+Refer to `blochsphere.pdf` for more information.

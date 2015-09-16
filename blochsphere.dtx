@@ -26,7 +26,7 @@
 %<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
 %<package>\ProvidesPackage{blochsphere}
 %<*package>
-    [2015/08/17 v1.0 blochsphere drawing package]
+    [2015/09/15 v1.1 blochsphere drawing package]
 %</package>
 %
 %<*driver>
@@ -77,6 +77,7 @@
 %   Right brace   \}     Tilde         \~}
 %
 %
+% \changes{v1.1}{2015/09/15}{Fix \\drawAxis using removed keyval "mark"}
 % \changes{v1.0}{2015/08/17}{Initial version}
 %
 % \DoNotIndex{\newcommand,\newenvironment}
@@ -645,13 +646,13 @@
 		\pgfmathsetmacro\newphi{180-##2}
 		\pgfmathsetmacro\newtheta{##3+180}
 		\ifnum\behind=0\relax
-			\labelPolar[scale=1,mark=0]{blochspheretmpp}{##2}{##3}
-			\labelPolar[mark=0]{blochspheretmps}{##2}{##3}
-			\labelPolar[mark=0]{blochspheretmpe}{\newphi}{\newtheta}
+			\labelPolar[scale=1]{blochspheretmpp}{##2}{##3}
+			\labelPolar{blochspheretmps}{##2}{##3}
+			\labelPolar{blochspheretmpe}{\newphi}{\newtheta}
 		\else
-			\labelPolar[scale=1,mark=0]{blochspheretmpp}{\newphi}{\newtheta}
-			\labelPolar[mark=0]{blochspheretmpe}{##2}{##3}
-			\labelPolar[mark=0]{blochspheretmps}{\newphi}{\newtheta}
+			\labelPolar[scale=1]{blochspheretmpp}{\newphi}{\newtheta}
+			\labelPolar{blochspheretmpe}{##2}{##3}
+			\labelPolar{blochspheretmps}{\newphi}{\newtheta}
 		\fi
 		\begingroup\edef\tmp{\endgroup%
 			\ifnum\behind=0\relax
