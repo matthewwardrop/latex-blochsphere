@@ -34,6 +34,7 @@
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
+\usepackage[T1]{fontenc}
 \usepackage{blochsphere}
 \usepackage{minted}
 \usepackage{hyperref}
@@ -241,10 +242,10 @@
 % \newminted{latex}{gobble=2,linenos}
 % \begin{latexcode}
 % \begin{blochsphere}[radius=1.5 cm,tilt=15,rotation=-20]
-%     \drawBallGrid[style={opacity=0.3}]{30}{30}
+%     \drawBallGrid[style={opacity=0.1}]{30}{30}
 %
-%     \drawGreatCircle[style={dashed}]{-60}{0}{0}
-%     \drawGreatCircle[style={dashed}]{60}{0}{0}
+%     \drawGreatCircle[style={dashed}]{-60}{0}
+%     \drawGreatCircle[style={dashed}]{60}{0}
 %
 %     \drawRotationLeft[scale=1.3,style={red}]{-60}{0}{0}{15}
 %     \drawRotationRight[scale=1.3,style={red}]{60}{0}{0}{15}
@@ -252,15 +253,15 @@
 %     \node at (-0.8,1.9) {\textcolor{red}{\tiny $J_{12}(t)$}};
 %     \node at (1.1,1.8) {\textcolor{red}{\tiny $J_{23}(t)$}};
 %
-%     \labelLatLon{up}{90}{0};
-%     \labelLatLon{down}{-90}{90};
+%     \labelLatLon{up}{90}{0}
+%     \labelLatLon{down}{-90}{90}
 %     \node[above] at (up) {{\tiny $\left|1\right>$ }};
 %     \node[below] at (down) {{\tiny $\left|0\right>$}};
 %
-%     \labelLatLon[labelmark=false]{d}{15}{90};
+%     \labelLatLon[labelmark=false]{d}{15}{90}
 %     \node at (d) {\color{gray}\fontsize{0.15cm}{1em}\selectfont $60^\circ$};
 %
-%     \labelLatLon[labelmark=falsa]{d2}{5}{78};
+%     \labelLatLon[labelmark=false]{d2}{5}{78}
 %     \node at (d2) {\color{gray}\fontsize{0.15cm}{1em}\selectfont $60^\circ$};
 % \end{blochsphere}
 % \end{latexcode}
@@ -726,14 +727,14 @@
 			decorate,
 			decoration={
 			markings,
-			mark=at position \pgfdecoratedpathlength-0.5pt with {\arrow[\blochsphere@statecolor,line width=\blochsphere@statewidth,opacity=0.2] {>}; },
+			mark=at position \pgfdecoratedpathlength-0.5pt with {\arrow[\blochsphere@statecolor,line width=\blochsphere@statewidth,opacity=0.2] {>} },
 			mark=between positions 0 and \pgfdecoratedpathlength-5pt step 0.5pt with {
 			\pgfmathsetmacro\myval{multiply(divide(
-			\pgfkeysvalueof{/pgf/decoration/mark info/distance from start}, \pgfdecoratedpathlength),100)};
-			\pgfsetfillcolor{\blochsphere@statecolor};
+			\pgfkeysvalueof{/pgf/decoration/mark info/distance from start}, \pgfdecoratedpathlength),100)}
+			\pgfsetfillcolor{\blochsphere@statecolor}
 			\pgfsetfillopacity{0.4-\myval/100*0.2}
-			\pgfpathcircle{\pgfpointorigin}{\blochsphere@statewidth};
-			\pgfusepath{fill};}
+			\pgfpathcircle{\pgfpointorigin}{\blochsphere@statewidth}
+			\pgfusepath{fill}}
 			}}}}
 		\else
 			\tikzset{test/.style={
@@ -741,14 +742,14 @@
 			decorate,
 			decoration={
 			markings,
-			mark=at position \pgfdecoratedpathlength-0.5pt with {\arrow[\blochsphere@statecolor,line width=\blochsphere@statewidth] {>}; },
+			mark=at position \pgfdecoratedpathlength-0.5pt with {\arrow[\blochsphere@statecolor,line width=\blochsphere@statewidth] {>} },
 			mark=between positions 0 and \pgfdecoratedpathlength-5pt step 0.5pt with {
 			\pgfmathsetmacro\myval{multiply(divide(
-			\pgfkeysvalueof{/pgf/decoration/mark info/distance from start}, \pgfdecoratedpathlength),100)};
-			\pgfsetfillcolor{\blochsphere@statecolor};
+			\pgfkeysvalueof{/pgf/decoration/mark info/distance from start}, \pgfdecoratedpathlength),100)}
+			\pgfsetfillcolor{\blochsphere@statecolor}
 			\pgfsetfillopacity{0.4+\myval/100*0.6}
-			\pgfpathcircle{\pgfpointorigin}{\blochsphere@statewidth};
-			\pgfusepath{fill};}
+			\pgfpathcircle{\pgfpointorigin}{\blochsphere@statewidth}
+			\pgfusepath{fill}}
 			}}}}
 		\fi
 		\path [test,on layer=main] (0,0) -- (##2);
